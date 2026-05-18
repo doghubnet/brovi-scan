@@ -47,6 +47,7 @@ export function ScanForm({
   async function saveToSupabase(data: Record<string, unknown>, result: AIReport) {
     if (!tableName) return;
     const supabase = createClient();
+    if (!supabase) { setSaveMessage("Database connection is not configured."); return; }
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) { setSaveMessage("Sign in to save this result to your Brovi Scan account."); return; }
     const { error } = await supabase.from(tableName).insert(toTableInsert(tableName, auth.user.id, data, result));
@@ -56,6 +57,7 @@ export function ScanForm({
   async function generateTasks() {
     if (!report) return;
     const supabase = createClient();
+    if (!supabase) { setSaveMessage("Database connection is not configured."); return; }
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) { setSaveMessage("Sign in to save tasks from recommendations."); return; }
     const rows = report.recommendations.slice(0, 5).map((title) => ({ user_id: auth.user!.id, title, description: "Generated from Brovi Scan recommendations.", priority: report.score < 60 ? "High" : "Medium", status: "To Do", source_module: tableName ?? "Brovi Scan" }));

@@ -3,6 +3,8 @@ import { ScanForm } from "@/components/forms/ScanForm";
 import { UploadBox } from "@/components/forms/UploadBox";
 import { currencies } from "@/lib/constants/copy";
 
+export const dynamic = "force-dynamic";
+
 const fields = [
   { label: "Sponsor name", name: "sponsorName" },
   { label: "Sponsor relation", name: "sponsorRelation", helper: "Example: father, mother, uncle, employer, self." },

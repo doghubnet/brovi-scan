@@ -25,6 +25,7 @@ export function InterviewPracticeClient() {
     setFeedback(result);
     setHistory((current) => [result, ...current]);
     const supabase = createClient();
+    if (!supabase) { setSaveMessage("Database connection is not configured."); return; }
     const { data } = await supabase.auth.getUser();
     if (data.user) {
       await supabase.from("interview_sessions").insert({ user_id: data.user.id, target_country: values.targetCountry, visa_type: values.visaType, difficulty: values.difficulty, question: values.question, answer: values.answer, score: result.score, feedback_json: result });

@@ -20,6 +20,7 @@ export function AuthForm() {
     setLoading(true);
     setMessage("");
     const supabase = createClient();
+    if (!supabase) { setMessage("Database connection is not configured."); setLoading(false); return; }
     const response = mode === "signIn"
       ? await supabase.auth.signInWithPassword({ email, password })
       : await supabase.auth.signUp({ email, password, options: { data: { full_name: fullName } } });

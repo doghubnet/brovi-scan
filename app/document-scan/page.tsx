@@ -3,6 +3,8 @@ import { ScanForm } from "@/components/forms/ScanForm";
 import { UploadBox } from "@/components/forms/UploadBox";
 import { documentStatuses } from "@/lib/constants/copy";
 
+export const dynamic = "force-dynamic";
+
 const docs = [
   ["Passport status", "passportStatus"], ["Transcript status", "transcriptStatus"], ["Grade 12 certificate", "grade12Certificate"], ["National entrance exam result", "entranceExamResult"], ["CV status", "cvStatus"], ["Motivation letter", "motivationLetterStatus"], ["Recommendation letter", "recommendationLetterStatus"], ["English proof", "englishStatus"], ["Declaration of Value", "declarationOfValueStatus"], ["CIMEA when applicable", "cimeaStatus"], ["Admission status", "admissionStatus"], ["Pre-enrollment receipt", "preEnrollmentStatus"], ["Family sponsorship letter", "sponsorshipLetterStatus"], ["Birth certificate when needed", "birthCertificateStatus"], ["Police clearance when needed", "policeClearanceStatus"], ["Travel insurance when needed", "travelInsuranceStatus"], ["Translation status", "translationStatus"], ["Financial docs status", "financialDocsStatus"], ["Other country-specific documents", "otherStatus"],
 ];

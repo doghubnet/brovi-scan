@@ -13,6 +13,7 @@ export function ReadinessReportActions({ programScore, documentScore, financialS
   async function saveReport() {
     if (overallScore === null || overallScore === undefined) return;
     const supabase = createClient();
+    if (!supabase) return setMessage("Database connection is not configured.");
     const { data } = await supabase.auth.getUser();
     if (!data.user) return setMessage("Sign in to save your report.");
     const { error } = await supabase.from("final_reports").insert({ user_id: data.user.id, program_score: programScore, document_score: documentScore, financial_score: financialScore, interview_score: interviewScore, overall_score: overallScore, risk_level: riskLevel(overallScore), report_json: { programScore, documentScore, financialScore, interviewScore, overallScore } });

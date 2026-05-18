@@ -9,12 +9,16 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 async function latestScore(table: string, userId: string) {
   const supabase = await createServerSupabaseClient();
+  if (!supabase) return null;
   const { data } = await supabase.from(table).select("score").eq("user_id", userId).order("created_at", { ascending: false }).limit(1).maybeSingle();
   return typeof data?.score === "number" ? data.score : null;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function Dashboard() {
   const supabase = await createServerSupabaseClient();
+  if (!supabase) return <DashboardShell><EmptyState title="Dashboard" description="Your dashboard will be available after BROVI database connection is configured." /></DashboardShell>;
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return <DashboardShell><EmptyState title="Sign in required" description="Sign in to view your saved Brovi Scan dashboard." /><ButtonLink href="/login">Sign in</ButtonLink></DashboardShell>;
   const [program, documents, financial, interview] = await Promise.all([latestScore("program_profiles", auth.user.id), latestScore("document_reviews", auth.user.id), latestScore("financial_reviews", auth.user.id), latestScore("interview_sessions", auth.user.id)]);

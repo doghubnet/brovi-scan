@@ -6,12 +6,16 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 async function countRows(table: string) {
   const supabase = await createServerSupabaseClient();
+  if (!supabase) return 0;
   const { count } = await supabase.from(table).select("id", { count: "exact", head: true });
   return count ?? 0;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function Admin() {
   const supabase = await createServerSupabaseClient();
+  if (!supabase) return <DashboardShell><EmptyState title="Admin Dashboard" description="Admin operations will be available after BROVI database connection is configured." /></DashboardShell>;
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return <DashboardShell><EmptyState title="Admin access required" description="Sign in with a BROVI administrator account to continue." /></DashboardShell>;
   const { data: profile } = await supabase.from("users_profile").select("role").eq("user_id", auth.user.id).maybeSingle();

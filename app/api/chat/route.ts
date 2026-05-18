@@ -7,6 +7,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 export async function POST(req: Request) {
   const { message, sessionId } = await req.json();
   const supabase = await createServerSupabaseClient();
+  if (!supabase) return NextResponse.json({ error: "Database connection is not configured." }, { status: 503 });
   const { data: auth } = await supabase.auth.getUser();
   let activeSessionId = sessionId as string | undefined;
   if (auth.user && !activeSessionId) {

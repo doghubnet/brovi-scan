@@ -4,7 +4,7 @@
 
 > Brovi Scan provides preparation guidance only. The readiness score is not a visa guarantee. Final decisions are made by official embassies, consulates, universities, and immigration authorities.
 
-## Production setup for BROVI owner
+## Founder Production Setup
 
 1. Create the Supabase project under the BROVI founder account.
 2. Run `supabase/production_schema.sql` in Supabase SQL editor.

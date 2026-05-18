@@ -14,7 +14,7 @@ export function TopNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [startHref, setStartHref] = useState("/login");
-  useEffect(() => { createClient().auth.getUser().then(({ data }) => setStartHref(data.user ? "/dashboard" : "/login")); }, []);
+  useEffect(() => { const supabase = createClient(); if (!supabase) return; supabase.auth.getUser().then(({ data }) => setStartHref(data.user ? "/dashboard" : "/login")); }, []);
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-soft/85 backdrop-blur dark:border-white/10 dark:bg-navy/85">

@@ -10,3 +10,14 @@
 - Create founder account from `/login`.
 - Promote founder to admin.
 - Test auth, scans, report generation, applications, document vault uploads, tasks, consultant requests, assistant chat, and admin dashboard.
+
+
+## Vercel Environment Variables
+
+- NEXT_PUBLIC_SUPABASE_URL
+- NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+- SUPABASE_SERVICE_ROLE_KEY
+- GEMINI_API_KEY
+- NEXT_PUBLIC_SITE_URL
+
+After adding or changing variables, deploy again.

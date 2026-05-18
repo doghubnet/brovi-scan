@@ -9,7 +9,8 @@ export function LogoutButton({ className = "text-royal" }: { className?: string 
   const [loading, setLoading] = useState(false);
   async function signOut() {
     setLoading(true);
-    await createClient().auth.signOut();
+    const supabase = createClient();
+    if (supabase) await supabase.auth.signOut();
     router.refresh();
     router.push("/login");
   }

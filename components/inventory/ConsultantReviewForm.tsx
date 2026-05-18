@@ -14,6 +14,7 @@ export function ConsultantReviewForm() {
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const supabase = createClient();
+    if (!supabase) return setError("Database connection is not configured.");
     const { data } = await supabase.auth.getUser();
     if (!data.user) return setError("Sign in to request a BROVI consultant review.");
     const response = await supabase.from("consultant_review_requests").insert({ user_id: data.user.id, request_type: requestType, contact_preference: contactPreference, message });

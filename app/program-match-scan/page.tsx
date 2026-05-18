@@ -3,6 +3,8 @@ import { ProgressStepper } from "@/components/forms/ProgressStepper";
 import { ProgramMatchCard } from "@/components/forms/ProgramMatchCard";
 import { ScanForm } from "@/components/forms/ScanForm";
 
+export const dynamic = "force-dynamic";
+
 const fields = [
   { label: "Full name", name: "fullName", helper: "Use the name that appears on your passport." },
   { label: "Country of origin", name: "countryOfOrigin" },
