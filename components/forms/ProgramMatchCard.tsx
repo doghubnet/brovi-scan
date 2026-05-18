@@ -1,0 +1,2 @@
+import { GraduationCap } from "lucide-react";
+export function ProgramMatchCard(){return <div className="card"><GraduationCap className="h-8 w-8 text-royal"/><h3 className="mt-4 text-xl font-bold">Best-fit program categories</h3><p className="mt-2 muted">Computer Science, Business Analytics, Public Health, Engineering Management, and related applied programs based on academic fit, budget, language readiness, and career alignment.</p></div>}

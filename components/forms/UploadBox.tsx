@@ -1,0 +1,2 @@
+import { UploadCloud } from "lucide-react";
+export function UploadBox({label}:{label:string}){return <div className="rounded-2xl border border-dashed border-slate-300 p-5 text-center dark:border-white/20"><UploadCloud className="mx-auto h-8 w-8 text-royal"/><p className="mt-2 text-sm font-semibold">{label}</p><p className="mt-1 text-xs muted">Private Supabase Storage only. Do not upload card numbers, passwords, bank logins, or private account access.</p><input aria-label={label} className="mt-3 input" type="file"/></div>}
