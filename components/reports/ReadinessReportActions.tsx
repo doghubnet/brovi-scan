@@ -31,7 +31,7 @@ export function ReadinessReportActions() {
         <Download className="mr-2 h-4 w-4" />
         Download PDF
       </Button>
-      <ButtonLink href="/free-plan" variant="secondary">
+      <ButtonLink href="/consultant-review" variant="secondary">
         <UserCheck className="mr-2 h-4 w-4" />
         Request BROVI Consultant Review
       </ButtonLink>

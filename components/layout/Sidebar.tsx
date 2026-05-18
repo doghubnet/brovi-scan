@@ -1,3 +1,21 @@
-import Link from "next/link"; import { FileText, Home, Landmark, MessageSquare, PieChart, ShieldCheck, UserCog } from "lucide-react";
-const items=[['/dashboard',Home,'Dashboard'],['/program-match-scan',PieChart,'Program Match'],['/document-scan',FileText,'Document Scan'],['/bank-statement-scan',Landmark,'Bank Statement'],['/interview-practice',MessageSquare,'Interview'],['/readiness-report',ShieldCheck,'Report'],['/admin',UserCog,'Admin'] ] as const;
-export function Sidebar(){return <aside className="card h-fit lg:sticky lg:top-24"><nav className="grid gap-2">{items.map(([href,Icon,label])=><Link key={href} href={href} className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-blue-50 hover:text-royal dark:text-slate-300 dark:hover:bg-white/10"><Icon className="h-4 w-4"/>{label}</Link>)}</nav></aside>}
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { navItems } from "@/lib/constants/copy";
+
+export function Sidebar() {
+  const pathname = usePathname();
+  return (
+    <aside className="card h-fit w-full lg:sticky lg:top-24 lg:w-60">
+      <nav className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1">
+        {navItems.map(({ href, icon: Icon, label }) => (
+          <Link key={href} href={href} className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold transition ${pathname === href ? "bg-blue-50 text-royal dark:bg-white/10" : "text-slate-600 hover:bg-blue-50 hover:text-royal dark:text-slate-300 dark:hover:bg-white/10"}`}>
+            <Icon className="h-4 w-4" />
+            <span className="truncate">{label}</span>
+          </Link>
+        ))}
+      </nav>
+    </aside>
+  );
+}

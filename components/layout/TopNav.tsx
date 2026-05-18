@@ -1,2 +1,49 @@
-import Link from "next/link"; import { ScanLine } from "lucide-react"; import { navItems } from "@/lib/constants/copy"; import { ButtonLink } from "@/components/ui/button";
-export function TopNav(){return <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-soft/80 backdrop-blur dark:border-white/10 dark:bg-navy/80"><div className="container-page flex h-20 items-center justify-between gap-4"><Link href="/" className="flex items-center gap-3 font-black tracking-tight"><span className="rounded-2xl bg-royal p-2 text-white"><ScanLine className="h-5 w-5"/></span><span>BROVI <span className="text-royal">Scan</span></span></Link><nav className="hidden items-center gap-5 text-sm font-medium text-slate-600 dark:text-slate-300 lg:flex">{navItems.map(i=><Link className="hover:text-royal" key={i.href} href={i.href}>{i.label}</Link>)}</nav><div className="hidden gap-2 sm:flex"><ButtonLink href="/program-match-scan">Start Free Scan</ButtonLink><ButtonLink href="/login" variant="secondary">Sign In</ButtonLink></div></div></header>}
+"use client";
+
+import Link from "next/link";
+import { Menu, ScanLine, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { AuthStatus } from "@/components/auth/AuthStatus";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { ButtonLink } from "@/components/ui/button";
+import { headerNavItems, navItems } from "@/lib/constants/copy";
+
+export function TopNav() {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-soft/85 backdrop-blur dark:border-white/10 dark:bg-navy/85">
+      <div className="container-page flex min-h-20 items-center justify-between gap-4 py-3">
+        <Link href="/" className="flex items-center gap-3 font-black tracking-tight">
+          <span className="rounded-2xl bg-royal p-2 text-white"><ScanLine className="h-5 w-5" /></span>
+          <span>BROVI <span className="text-royal">Scan</span></span>
+        </Link>
+        <nav className="hidden items-center gap-5 text-sm font-medium text-slate-600 dark:text-slate-300 lg:flex">
+          {headerNavItems.map((item) => (
+            <Link className={pathname === item.href ? "text-royal" : "hover:text-royal"} key={item.href} href={item.href}>{item.label}</Link>
+          ))}
+        </nav>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <AuthStatus />
+          <div className="hidden gap-2 sm:flex">
+            <ButtonLink href="/program-match-scan">Start Free Scan</ButtonLink>
+            <ButtonLink href="/login" variant="secondary">Sign In</ButtonLink>
+          </div>
+          <button className="rounded-2xl border border-slate-200 p-2 dark:border-white/10 lg:hidden" type="button" onClick={() => setOpen((value) => !value)} aria-label="Toggle menu">
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </div>
+      {open ? (
+        <nav className="container-page grid gap-2 pb-4 lg:hidden">
+          {navItems.map((item) => (
+            <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className={`rounded-2xl px-4 py-3 text-sm font-semibold ${pathname === item.href ? "bg-blue-50 text-royal dark:bg-white/10" : "text-slate-700 dark:text-slate-200"}`}>{item.label}</Link>
+          ))}
+        </nav>
+      ) : null}
+    </header>
+  );
+}

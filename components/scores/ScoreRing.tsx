@@ -1,2 +1,24 @@
 import { RiskBadge } from "./RiskBadge";
-export function ScoreRing({score,label}:{score:number;label:string}){const r=58,c=2*Math.PI*r,off=c-(score/100)*c;return <div className="flex flex-col items-center gap-3"><div className="relative h-36 w-36"><svg className="h-full w-full -rotate-90"><circle cx="72" cy="72" r={r} stroke="currentColor" strokeWidth="12" fill="none" className="text-slate-200 dark:text-white/10"/><circle cx="72" cy="72" r={r} stroke="url(#g)" strokeWidth="12" fill="none" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={off} className="transition-all duration-1000"/><defs><linearGradient id="g"><stop stopColor="#2563EB"/><stop offset="1" stopColor="#06B6D4"/></linearGradient></defs></svg><div className="absolute inset-0 grid place-items-center text-center"><div><div className="text-3xl font-black">{score}%</div><div className="text-xs muted">{label}</div></div></div></div><RiskBadge score={score}/></div>}
+
+export function ScoreRing({ score, label }: { score: number; label: string }) {
+  const radius = 58;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (score / 100) * circumference;
+
+  return (
+    <div className="flex flex-col items-center gap-3 text-center">
+      <div className="relative h-36 w-36" aria-label={`${label}: ${score}%`}>
+        <svg className="h-full w-full -rotate-90">
+          <circle cx="72" cy="72" r={radius} stroke="currentColor" strokeWidth="12" fill="none" className="text-slate-200 dark:text-white/10" />
+          <circle cx="72" cy="72" r={radius} stroke="url(#scoreGradient)" strokeWidth="12" fill="none" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={offset} className="transition-all duration-1000" />
+          <defs><linearGradient id="scoreGradient"><stop stopColor="#2563EB" /><stop offset="1" stopColor="#06B6D4" /></linearGradient></defs>
+        </svg>
+        <div className="absolute inset-0 grid place-items-center">
+          <div className="text-4xl font-black leading-none">{score}%</div>
+        </div>
+      </div>
+      <div className="max-w-40 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{label}</div>
+      <RiskBadge score={score} />
+    </div>
+  );
+}
