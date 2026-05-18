@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
+import { toTableInsert } from "@/lib/db-mapping";
 import type { AIReport } from "@/types";
 import { RecommendationList } from "@/components/reports/RecommendationList";
 import { ScoreRing } from "@/components/scores/ScoreRing";
@@ -33,7 +34,7 @@ export function ScanForm({
   const { register, handleSubmit, formState: { errors } } = useForm<Record<string, string>>();
   const [report, setReport] = useState<AIReport | null>(null);
   const [loading, setLoading] = useState(false);
-  const [saveMessage, setSaveMessage] = useState("Results are kept locally in demo mode until Supabase Auth is configured.");
+  const [saveMessage, setSaveMessage] = useState("");
 
   const schema = useMemo(() => {
     const shape: z.ZodRawShape = {};
@@ -44,12 +45,22 @@ export function ScanForm({
   }, [fields]);
 
   async function saveToSupabase(data: Record<string, unknown>, result: AIReport) {
-    if (!tableName || !process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return;
+    if (!tableName) return;
     const supabase = createClient();
     const { data: auth } = await supabase.auth.getUser();
-    if (!auth.user) return;
-    await supabase.from(tableName).insert({ user_id: auth.user.id, score: result.score, report_json: result, ...data });
-    setSaveMessage("Saved to your Brovi Scan account.");
+    if (!auth.user) { setSaveMessage("Sign in to save this result to your Brovi Scan account."); return; }
+    const { error } = await supabase.from(tableName).insert(toTableInsert(tableName, auth.user.id, data, result));
+    setSaveMessage(error ? "We could not save this result. Please try again." : "Saved to your Brovi Scan account.");
+  }
+
+  async function generateTasks() {
+    if (!report) return;
+    const supabase = createClient();
+    const { data: auth } = await supabase.auth.getUser();
+    if (!auth.user) { setSaveMessage("Sign in to save tasks from recommendations."); return; }
+    const rows = report.recommendations.slice(0, 5).map((title) => ({ user_id: auth.user!.id, title, description: "Generated from Brovi Scan recommendations.", priority: report.score < 60 ? "High" : "Medium", status: "To Do", source_module: tableName ?? "Brovi Scan" }));
+    const { error } = await supabase.from("tasks").insert(rows);
+    setSaveMessage(error ? "Tasks could not be generated. Please try again." : "Tasks generated from recommendations.");
   }
 
   async function onSubmit(rawData: Record<string, string>) {
@@ -95,7 +106,8 @@ export function ScanForm({
             <h3 className="mt-6 text-lg font-bold">Strengths</h3><RecommendationList items={report.strengths.length ? report.strengths : ["Basic scan completed."]} />
             <h3 className="mt-6 text-lg font-bold">Weak points and recommendations</h3><RecommendationList items={[...report.weaknesses, ...report.recommendations]} />
             <p className="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-800 dark:bg-amber-400/10 dark:text-amber-100">{report.warning}</p>
-            <p className="mt-3 text-xs muted">{saveMessage}</p>
+            {saveMessage ? <p className="mt-3 text-xs muted">{saveMessage}</p> : null}
+            <button className="btn-secondary mt-4 w-full" type="button" onClick={generateTasks}>Generate tasks from recommendations</button>
           </>
         ) : <p className="muted">Submit the form to receive percentage-based readiness scoring and step-by-step recommendations.</p>}
       </aside>

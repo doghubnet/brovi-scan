@@ -25,7 +25,7 @@ export default function Home() {
               </div>
             </div>
             <div className="card">
-              <div className="flex items-center justify-between"><h2 className="text-xl font-bold">Dashboard Preview</h2><span className="rounded-full bg-cyan/10 px-3 py-1 text-xs font-bold text-cyan">Sample</span></div>
+              <div className="flex items-center justify-between"><h2 className="text-xl font-bold">Dashboard Preview</h2><span className="rounded-full bg-cyan/10 px-3 py-1 text-xs font-bold text-cyan">Sample preview</span></div>
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <ScoreRing score={scores.overall} label="Overall Brovi Scan Score" />
                 <div className="space-y-3">

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ChatWidget } from "@/components/chatbot/chat-widget";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
 
@@ -11,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen overflow-x-hidden bg-soft font-sans antialiased text-navy dark:bg-navy dark:text-white">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>{children}<ChatWidget /></ThemeProvider>
       </body>
     </html>
   );

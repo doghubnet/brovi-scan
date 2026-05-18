@@ -1,2 +1,21 @@
-import { createClient } from "@supabase/supabase-js";
-export function createServiceClient(){return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL || "", process.env.SUPABASE_SERVICE_ROLE_KEY || "", { auth: { persistSession: false } });}
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+import { supabasePublishableKey, supabaseUrl } from "@/lib/env";
+
+export async function createServerSupabaseClient() {
+  const cookieStore = await cookies();
+  return createServerClient(supabaseUrl, supabasePublishableKey, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll();
+      },
+      setAll(cookiesToSet: { name: string; value: string; options: Record<string, unknown> }[]) {
+        try {
+          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
+        } catch {
+          // Server Components cannot set cookies; middleware/server actions can.
+        }
+      },
+    },
+  });
+}

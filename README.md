@@ -1,93 +1,70 @@
 # Brovi Scan
 
-**Brovi Scan: AI Visa Readiness & Program Match Tool** is a free-first Next.js application for international students to review program fit, document readiness, bank statement preparation, interview answers, application inventory, document vault items, task roadmap, and an overall readiness report.
+**Brovi Scan: AI Visa Readiness & Program Match Tool** is BROVI's production SaaS platform for program matching, document readiness, financial preparation, interview practice, application tracking, task planning, consultant review requests, and AI guidance.
 
 > Brovi Scan provides preparation guidance only. The readiness score is not a visa guarantee. Final decisions are made by official embassies, consulates, universities, and immigration authorities.
 
-## Install and run
+## Production setup for BROVI owner
+
+1. Create the Supabase project under the BROVI founder account.
+2. Run `supabase/production_schema.sql` in Supabase SQL editor.
+3. Run `supabase/production_rls.sql` in Supabase SQL editor.
+4. Confirm the private storage bucket `brovi-private-documents` exists and is not public.
+5. Add Vercel environment variables from `.env.example`.
+6. Deploy to Vercel with `npm run build`.
+7. Connect the BROVI custom domain.
+8. Create the founder user account at `/login`.
+9. Promote founder to admin in Supabase SQL:
+
+```sql
+update public.users_profile set role = 'admin' where user_id = '<founder-auth-user-id>';
+```
+
+10. Test all production routes and RLS policies.
+
+## Environment variables
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+GEMINI_API_KEY=
+NEXT_PUBLIC_SITE_URL=
+```
+
+`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` is preferred. `NEXT_PUBLIC_SUPABASE_ANON_KEY` remains supported for legacy compatibility. Never expose `SUPABASE_SERVICE_ROLE_KEY` in client components.
+
+## Local development
 
 ```bash
 npm install
 npm run dev
 npm run build
+npm run lint
 ```
 
-## Environment variables
+## Production data model
 
-Copy `.env.example` to `.env.local` and fill:
+Use:
+- `supabase/production_schema.sql`
+- `supabase/production_rls.sql`
 
-```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-GEMINI_API_KEY=
-BROVI_DEMO_ADMIN=true
-```
+Legacy phase files remain for migration reference only.
 
-If `GEMINI_API_KEY` is missing, API routes use deterministic fallback scoring and return: “AI feedback is unavailable. Basic scoring mode is active.” If Supabase variables are missing, auth and persistence screens show demo mode.
+## Key files
 
-## Supabase setup
-
-1. Create a Supabase project.
-2. Run `supabase/schema.sql` and `supabase/rls.sql` for phase 1 tables.
-3. Run `supabase/schema_phase2.sql` and `supabase/rls_phase2.sql` for applications, document vault, tasks, consultant requests, and user settings.
-4. Confirm `brovi-private-uploads` is private.
-5. Store uploads under a user-id folder path, for example: `{user_id}/document-vault/transcript.pdf`.
-6. Promote an admin by setting `users_profile.role = 'admin'` for the admin user.
-
-## Gemini setup
-
-1. Create a Gemini API key in Google AI Studio.
-2. Add it as `GEMINI_API_KEY` in `.env.local` and Vercel.
-3. AI prompt rules live in `lib/ai/prompts.ts`, JSON parsing lives in `lib/ai/json-safe.ts`, and Gemini transport lives in `lib/ai/gemini.ts`.
-4. Version two sends user-entered summaries and form fields only, not raw private files.
-
-## Vercel deployment
-
-1. Push the repository to GitHub.
-2. Import the project into Vercel.
-3. Add all environment variables.
-4. Deploy with the default Next.js build command: `npm run build`.
-
-## Important files
-
+- Supabase browser client: `lib/supabase/client.ts`
+- Supabase server client: `lib/supabase/server.ts`
+- Supabase admin client: `lib/supabase/admin.ts`
+- Environment validation: `lib/env.ts`
 - Scoring: `lib/scoring/index.ts`
-- AI prompts: `lib/ai/prompts.ts`
-- Gemini integration: `lib/ai/gemini.ts`
-- Safe AI JSON parsing: `lib/ai/json-safe.ts`
-- Validation schemas: `lib/validators/schemas.ts`
-- Shared copy, navigation, and seed interview questions: `lib/constants/copy.ts`
-- Theme provider: `components/providers/theme-provider.tsx`
-- Theme switcher: `components/theme-toggle.tsx`
-- Supabase schema: `supabase/schema.sql`, `supabase/schema_phase2.sql`
-- RLS policies: `supabase/rls.sql`, `supabase/rls_phase2.sql`
-- Main UI components: `components/layout`, `components/scores`, `components/forms`, `components/reports`, `components/ui`, `components/inventory`
-- API routes: `app/api/*/route.ts`
+- Gemini analysis: `lib/ai/gemini.ts`
+- Brovi Assistant prompt: `lib/ai/brovi-assistant-prompt.ts`
+- Fallback chat: `lib/ai/fallback-chat.ts`
+- Chat API: `app/api/chat/route.ts`
+- Chat UI: `components/chatbot/*`
 
-## Pages to test
+## Acceptance routes
 
-- `/` landing page with dark/light theme switch and meaningful feature copy.
-- `/login` email sign in, sign up, logout, and demo-mode banner.
-- `/dashboard` score cards, recommendations, and sidebar navigation.
-- `/program-match-scan` validated program readiness scan.
-- `/document-scan` dropdown-based document checklist.
-- `/bank-statement-scan` safe financial summary scan with numeric validation.
-- `/interview-practice` one-question-at-a-time practice and deterministic feedback fallback.
-- `/readiness-report` report, chart, print/copy actions, and print-safe CSS.
-- `/applications` application tracker board.
-- `/document-vault` private-storage document inventory table.
-- `/tasks` recommendation roadmap checklist.
-- `/consultant-review` BROVI human review request form.
-- `/admin` admin sample dashboard and client-safe CSV export.
-
-## Free-first model
-
-- 1 full report
-- 10 interview questions
-- 1 program match
-- 1 basic document checklist
-- Premium placeholder only; no payment integration in version one.
-
-## Safety rules
-
-Brovi Scan does not ask for card numbers, bank passwords, bank login details, or private account access. Scores are readiness scores only and must not be described as approval probabilities.
+`/`, `/login`, `/dashboard`, `/program-match-scan`, `/document-scan`, `/bank-statement-scan`, `/interview-practice`, `/readiness-report`, `/applications`, `/document-vault`, `/tasks`, `/consultant-review`, `/admin`, `/privacy`, `/terms`.

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { Menu, ScanLine, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { AuthStatus } from "@/components/auth/AuthStatus";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { UserMenu } from "@/components/auth/user-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ButtonLink } from "@/components/ui/button";
 import { headerNavItems, navItems } from "@/lib/constants/copy";
@@ -12,6 +13,8 @@ import { headerNavItems, navItems } from "@/lib/constants/copy";
 export function TopNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [startHref, setStartHref] = useState("/login");
+  useEffect(() => { createClient().auth.getUser().then(({ data }) => setStartHref(data.user ? "/dashboard" : "/login")); }, []);
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-soft/85 backdrop-blur dark:border-white/10 dark:bg-navy/85">
@@ -27,10 +30,9 @@ export function TopNav() {
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <AuthStatus />
+          <UserMenu />
           <div className="hidden gap-2 sm:flex">
-            <ButtonLink href="/program-match-scan">Start Free Scan</ButtonLink>
-            <ButtonLink href="/login" variant="secondary">Sign In</ButtonLink>
+            <ButtonLink href={startHref}>Start Free Scan</ButtonLink>
           </div>
           <button className="rounded-2xl border border-slate-200 p-2 dark:border-white/10 lg:hidden" type="button" onClick={() => setOpen((value) => !value)} aria-label="Toggle menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
