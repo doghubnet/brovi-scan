@@ -1,0 +1,1 @@
+export function LoadingSkeleton(){return <div className="animate-pulse space-y-3"><div className="h-5 w-1/3 rounded bg-slate-200 dark:bg-white/10"/><div className="h-24 rounded-2xl bg-slate-200 dark:bg-white/10"/><div className="h-5 w-2/3 rounded bg-slate-200 dark:bg-white/10"/></div>}

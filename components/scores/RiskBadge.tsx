@@ -1,0 +1,2 @@
+import { riskLevel } from "@/lib/scoring";
+export function RiskBadge({score,label}:{score?:number;label?:string}){const risk=label||riskLevel(score??0); const cls=risk.includes("High")?"bg-red-100 text-risk dark:bg-red-500/15":risk.includes("Work")||risk.includes("Major")?"bg-amber-100 text-amber-700 dark:bg-amber-500/15":risk==="Moderate"?"bg-cyan-100 text-cyan-700 dark:bg-cyan-500/15":"bg-green-100 text-success dark:bg-green-500/15"; return <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${cls}`}>{risk}</span>}
