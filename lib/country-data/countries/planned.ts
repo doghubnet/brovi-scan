@@ -16,9 +16,12 @@ const mk = (countryCode: string, countryName: string): CountryData => ({
   commonRiskFlags: [],
   recommendedTasks: [],
   disclaimer: "This destination is not yet active. Do not use it as official guidance.",
+  researchTodo: ["Confirm official visa/residence authority page.", "Confirm university admission evidence list.", "Confirm financial evidence categories and conditions.", "Confirm interview-focused risk patterns from official guidance."],
+  officialSourceCandidates: ["National immigration authority website", "Official embassy/consulate visa page", "Official higher-education ministry or recognition portal"],
+  riskNotePlaceholders: ["Outdated checklist risk", "Unverified translation/legalization risk", "Financial evidence mismatch risk"],
+  activationChecklist: ["Verify at least two official sources", "Set lastReviewed date", "Create 5+ document groups", "Add 20+ document items", "Add 3+ financial notes", "Add 6+ interview groups", "Add 6+ recommended tasks", "Add clear verification warning"],
 });
 
 export const plannedCountryPacks: CountryData[] = [
-  mk("ES", "Spain"), mk("BE", "Belgium"), mk("TR", "Turkey"), mk("AE", "United Arab Emirates"), mk("IE", "Ireland"), mk("SE", "Sweden"), mk("FI", "Finland"), mk("NO", "Norway"), mk("DK", "Denmark"), mk("PL", "Poland"), mk("CZ", "Czech Republic"), mk("HU", "Hungary"),
   mk("KR", "South Korea"), mk("SA", "Saudi Arabia"), mk("QA", "Qatar"), mk("MY", "Malaysia"), mk("SG", "Singapore"), mk("RU", "Russia"), mk("CH", "Switzerland"), mk("PT", "Portugal"), mk("LT", "Lithuania"), mk("LV", "Latvia"), mk("EE", "Estonia"), mk("RO", "Romania"), mk("CY", "Cyprus"), mk("MT", "Malta"), mk("ZA", "South Africa"), mk("IN", "India"),
 ];

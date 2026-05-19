@@ -1,5 +1,18 @@
 import type { CountryData } from "./types";
 import { australiaPack } from "./countries/australia";
+import { belgiumPack } from "./countries/belgium";
+import { czechrepublicPack } from "./countries/czech-republic";
+import { denmarkPack } from "./countries/denmark";
+import { finlandPack } from "./countries/finland";
+import { hungaryPack } from "./countries/hungary";
+import { irelandPack } from "./countries/ireland";
+import { norwayPack } from "./countries/norway";
+import { polandPack } from "./countries/poland";
+import { spainPack } from "./countries/spain";
+import { swedenPack } from "./countries/sweden";
+import { turkeyPack } from "./countries/turkey";
+import { unitedarabemiratesPack } from "./countries/united-arab-emirates";
+
 import { austriaPack } from "./countries/austria";
 import { canadaPack } from "./countries/canada";
 import { chinaPack } from "./countries/china";
@@ -13,7 +26,7 @@ import { plannedCountryPacks } from "./countries/planned";
 import { unitedkingdomPack } from "./countries/united-kingdom";
 import { unitedstatesPack } from "./countries/united-states";
 
-export const activeCountryPacks: CountryData[] = [australiaPack, austriaPack, canadaPack, chinaPack, francePack, germanyPack, italyPack, japanPack, netherlandsPack, newzealandPack, unitedkingdomPack, unitedstatesPack].sort((a,b)=>a.countryName.localeCompare(b.countryName));
+export const activeCountryPacks: CountryData[] = [australiaPack, austriaPack, belgiumPack, canadaPack, chinaPack, czechrepublicPack, denmarkPack, finlandPack, francePack, germanyPack, hungaryPack, irelandPack, italyPack, japanPack, netherlandsPack, newzealandPack, norwayPack, polandPack, spainPack, swedenPack, turkeyPack, unitedarabemiratesPack, unitedkingdomPack, unitedstatesPack].sort((a,b)=>a.countryName.localeCompare(b.countryName));
 export { plannedCountryPacks };
 export const allCountryPacks = [...activeCountryPacks, ...plannedCountryPacks];
 export const getCountryPack = (countrySlugOrCode?: string | null) => {
