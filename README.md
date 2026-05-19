@@ -107,3 +107,7 @@ AI_DAILY_DOCUMENT_REVIEW_LIMIT
 DEBUG_AI_LOGGING
 
 - Country-pack architecture guide: `docs/COUNTRY_DATA_PACKS.md`.
+
+
+## Local deterministic analysis
+Brovi Scan core scans use local deterministic analysis. External free-tier AI is optional and restricted to general chatbot guidance.

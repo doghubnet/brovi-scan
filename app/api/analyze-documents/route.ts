@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { runAI } from "@/lib/ai/router";
+import { analyzeDocumentsLocally } from "@/lib/document-rules";
+import { containsForbiddenSensitiveSecret } from "@/lib/local-intelligence";
 
 export async function POST(req: Request) {
   const input = await req.json();
-  if (JSON.stringify(input).toLowerCase().includes("password") || JSON.stringify(input).toLowerCase().includes("otp")) return NextResponse.json({ warning: "Remove private credentials and retry." }, { status: 400 });
-  const result = await runAI({ taskType: "document_review", sensitivity: "high", metadata: input, messages: [{ role: "user", content: JSON.stringify(input) }], requireJson: true });
-  return NextResponse.json(result.outputJson ?? { warning: result.warning ?? "Unavailable" });
+  if (containsForbiddenSensitiveSecret(JSON.stringify(input))) return NextResponse.json({ warning: "Remove private credentials and retry." }, { status: 400 });
+  const result = analyzeDocumentsLocally(input);
+  return NextResponse.json({ provider: "local", usedExternalAI: false, ...result });
 }

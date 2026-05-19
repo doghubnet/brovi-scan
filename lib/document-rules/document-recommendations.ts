@@ -1,0 +1,1 @@
+export const documentRecommendations=(missing:string[])=>["Upload missing critical attachments first.","Resolve expired and unclear items.","Confirm translation/legalization requirements officially.","Verify country checklist before submission.",...missing.slice(0,3).map((m)=>`Prepare ${m}.`)];

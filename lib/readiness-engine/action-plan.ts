@@ -1,0 +1,1 @@
+export const buildActionPlan=(missing:string[])=>["Complete all missing scan modules.","Resolve critical document gaps.","Clarify source-of-funds evidence.","Practice interview weak points.","Verify official country and university requirements.",...missing.slice(0,2).map((m)=>`Complete ${m} module.`)].slice(0,7);

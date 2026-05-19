@@ -1,0 +1,1 @@
+export const scoreProfile=(i:any)=>({ academic: i.gpa?18:8, language:i.englishLevel?12:5, budget:i.budget?15:6, docs:i.availableDocuments?12:5, career:i.careerGoal?13:6, country:i.targetCountry?9:4 });

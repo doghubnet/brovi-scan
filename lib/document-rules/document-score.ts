@@ -1,0 +1,2 @@
+import { clampScore } from "@/lib/local-intelligence";
+export const computeDocumentScore=(f:{missingCritical:number;missingImportant:number;unclear:number;expired:number;needsTranslation:number;needsLegalization:number;duplicate:number;noCountry:boolean;noAttachments:boolean;})=>clampScore(100-f.missingCritical*15-f.missingImportant*8-f.unclear*6-f.expired*12-f.needsTranslation*5-f.needsLegalization*5-f.duplicate*3-(f.noCountry?5:0)-(f.noAttachments?35:0));

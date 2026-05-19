@@ -1,0 +1,1 @@
+export const interviewCategories = ["country choice","university choice","program choice","sponsor and finance","academic background","future plan","home ties","previous refusal","study gap","document explanation"];

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { runAI } from "@/lib/ai/router";
+import { composeReadinessLocally } from "@/lib/readiness-engine";
 
 export async function POST(req: Request) {
   const input = await req.json();
-  const result = await runAI({ taskType: "readiness_report", sensitivity: "medium", metadata: input, messages: [{ role: "user", content: JSON.stringify(input) }], requireJson: true });
-  return NextResponse.json(result.outputJson ?? { warning: result.warning ?? "Unavailable" });
+  const result = composeReadinessLocally(input);
+  return NextResponse.json({ provider: "local", usedExternalAI: false, confidence: result.confidence, result });
 }
