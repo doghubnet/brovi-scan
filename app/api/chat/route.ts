@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
-import { BROVI_ASSISTANT_SYSTEM_PROMPT } from "@/lib/ai/brovi-assistant-prompt";
-import { fallbackChatReply } from "@/lib/ai/fallback-chat";
-import { chatWithOpenAI } from "@/lib/ai/openai-analysis";
-import { geminiApiKey } from "@/lib/env";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { runAI } from "@/lib/ai/router";
 
 export async function POST(req: Request) {
   const { message, sessionId } = await req.json();
@@ -16,16 +13,8 @@ export async function POST(req: Request) {
     activeSessionId = data?.id;
   }
   if (auth.user && activeSessionId) await supabase.from("chat_messages").insert({ session_id: activeSessionId, user_id: auth.user.id, role: "user", content: message });
-  let reply = (await chatWithOpenAI({ message: `${BROVI_ASSISTANT_SYSTEM_PROMPT}
-User message: ${message}` })) || fallbackChatReply(message);
-  if (reply === fallbackChatReply(message) && geminiApiKey) {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts: [{ text: `${BROVI_ASSISTANT_SYSTEM_PROMPT}
-User message: ${message}` }] }] }) });
-    if (res.ok) {
-      const data = await res.json();
-      reply = String(data?.candidates?.[0]?.content?.parts?.[0]?.text || reply);
-    }
-  }
+  const ai = await runAI({ taskType: "support_chat", sensitivity: "low", userId: auth.user?.id, messages: [{ role: "system", content: "You are Brovi Scan AI. Use readiness score language only." }, { role: "user", content: String(message ?? "") }] });
+  const reply = ai.outputText ?? "I can help with a checklist approach right now.";
   if (auth.user && activeSessionId) await supabase.from("chat_messages").insert({ session_id: activeSessionId, user_id: auth.user.id, role: "assistant", content: reply });
-  return NextResponse.json({ reply, sessionId: activeSessionId });
+  return NextResponse.json({ reply, sessionId: activeSessionId, usedFallback: ai.usedFallback });
 }
