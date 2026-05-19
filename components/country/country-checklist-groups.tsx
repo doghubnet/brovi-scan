@@ -1,0 +1,4 @@
+import type { CountryData } from "@/lib/country-data";
+import { CountryDataBadge } from "./country-data-badge";
+
+export function CountryChecklistGroups({ pack }: { pack: CountryData }) { return <div className="space-y-3">{pack.documentGroups.map((g)=><details key={g.key} className="rounded-xl border p-3"><summary className="cursor-pointer font-semibold">{g.title}</summary><p className="mt-1 text-sm muted">{g.description}</p><ul className="mt-2 space-y-2 text-sm">{g.documents.map((d)=><li key={d.key}><div>{d.label}</div><div className="text-xs muted">{d.notes}</div><div className="mt-1"> <CountryDataBadge label={d.importance} />{d.mayBeRequired?<CountryDataBadge label="May be required"/>:null}{d.verifyOfficially?<CountryDataBadge label="Verify officially"/>:null}</div></li>)}</ul></details>)}</div>; }

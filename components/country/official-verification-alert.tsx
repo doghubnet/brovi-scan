@@ -1,0 +1,1 @@
+export function OfficialVerificationAlert({ message }: { message: string }) { return <div className="rounded-xl border border-amber-400/40 bg-amber-50/60 p-3 text-sm text-amber-900 dark:bg-amber-900/20 dark:text-amber-100">{message}</div>; }

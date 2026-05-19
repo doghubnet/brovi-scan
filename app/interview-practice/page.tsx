@@ -1,10 +1,15 @@
+"use client";
+import { useMemo, useState } from "react";
 import { DashboardShell } from "@/components/layout/DashboardShell";
 import { InterviewPracticeClient } from "@/components/forms/InterviewPracticeClient";
-import { InterviewQuestionCard } from "@/components/forms/InterviewQuestionCard";
-import { interviewQuestions } from "@/lib/constants/copy";
+import { CountrySelector } from "@/components/country/country-selector";
+import { getCountryPack } from "@/lib/country-data";
+import { CountryInterviewGroups } from "@/components/country/country-interview-groups";
 
 export const dynamic = "force-dynamic";
 
 export default function Page() {
-  return <DashboardShell><h1 className="section-title">Interview Practice Scan</h1><div className="grid gap-4 md:grid-cols-2">{interviewQuestions.slice(0, 2).map((question, index) => <InterviewQuestionCard key={question} question={question} index={index} />)}</div><div className="card"><h2 className="text-xl font-bold">Interview quality dimensions</h2><p className="mt-2 muted">Feedback dimensions: clarity, specificity, consistency, honest explanation, financial clarity, program knowledge, and future plan. Question groups include study plan, university choice, program choice, sponsor and finance, academic background, future plan, refusal or gap explanation, country knowledge, and return plan.</p></div><InterviewPracticeClient /></DashboardShell>;
+  const [country, setCountry] = useState("");
+  const pack = useMemo(() => getCountryPack(country), [country]);
+  return <DashboardShell><h1 className="section-title">Interview Practice Scan</h1><CountrySelector value={country} onChange={setCountry} includePlanned />{pack?.status === "active" ? <CountryInterviewGroups pack={pack} /> : <div className="card">General questions are available. Select an active country for country-specific groups.</div>}<InterviewPracticeClient /></DashboardShell>;
 }

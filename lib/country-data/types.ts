@@ -1,0 +1,11 @@
+export type CountryPackStatus = "active" | "planned" | "archived";
+export type DocumentImportance = "critical" | "important" | "supporting" | "case_specific";
+export type DocumentStatus = "missing" | "available" | "unclear" | "expired" | "needs_translation" | "needs_legalization" | "ready" | "not_applicable";
+export type VerificationLevel = "official_source" | "institution_specific" | "case_specific" | "general_guidance";
+export type DocumentItem = { key: string; label: string; importance: DocumentImportance; notes: string; verificationLevel: VerificationLevel; verifyOfficially: boolean; mayBeRequired: boolean; userFacingWarning?: string };
+export type DocumentGroup = { key: string; title: string; description: string; documents: DocumentItem[] };
+export type InterviewQuestionGroup = { key: string; title: string; purpose: string; questions: string[] };
+export type FinancialReviewNote = { key: string; title: string; description: string; severity: "info" | "warning" | "critical" };
+export type CountryRiskFlag = { key: string; title: string; description: string; severity: "low" | "medium" | "high" };
+export type RecommendedTaskTemplate = { key: string; title: string; description: string; sourceModule: "program_match" | "document_scan" | "bank_statement_scan" | "interview_practice" | "readiness_report" | "application_tracker" | "document_vault"; priority: "Low" | "Medium" | "High" };
+export type CountryData = { countryCode: string; countrySlug: string; countryName: string; status: CountryPackStatus; lastReviewed: string; officialSourceNotes: string[]; requiredVerificationMessage: string; admissionNotes: string[]; visaRouteNotes: string[]; documentGroups: DocumentGroup[]; interviewQuestionGroups: InterviewQuestionGroup[]; financialReviewNotes: FinancialReviewNote[]; commonRiskFlags: CountryRiskFlag[]; recommendedTasks: RecommendedTaskTemplate[]; disclaimer: string };
