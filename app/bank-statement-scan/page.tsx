@@ -25,5 +25,5 @@ const fields = [
 ];
 
 export default function Page() {
-  return <DashboardShell><h1 className="section-title">Bank Statement Scan</h1><div className="card"><p className="font-semibold">Safe information only: account holder name, bank name, statement period, balances, inflows/outflows, sponsor relation, and source-of-funds explanation. Do not enter card numbers, bank login details, passwords, or private account access.</p></div><UploadBox label="Optional private bank statement support file" /><ScanForm fields={fields} endpoint="/api/analyze-finance" submitLabel="Review financial readiness" tableName="financial_reviews" /></DashboardShell>;
+  return <DashboardShell><h1 className="section-title">Bank Statement Scan</h1><div className="card"><p className="font-semibold">Safe information only: statement period, opening and closing balance, average balance, regular income pattern, large deposit explanation, sponsor relationship proof, tuition and living-cost coverage, accommodation support, and source-of-funds explanation. Do not upload or enter card numbers, bank login details, passwords, OTPs, or private account access.</p></div><UploadBox label="Optional private bank statement support file" /><ScanForm fields={fields} endpoint="/api/analyze-finance" submitLabel="Review financial readiness" tableName="financial_reviews" /></DashboardShell>;
 }
