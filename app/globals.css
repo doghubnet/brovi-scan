@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; --bg: #F8FAFC; --fg: #08111F; --card: rgba(255,255,255,.82); --border: rgba(148,163,184,.32); --motion-fast: 160ms; --motion-med: 280ms; }
+:root { color-scheme: light; --bg: #F8FAFC; --fg: #08111F; --card: rgba(255,255,255,.82); --border: rgba(148,163,184,.32); --motion-fast: 160ms; --motion-base: 280ms; --motion-slow: 520ms; --ease-out-premium: cubic-bezier(0.16, 1, 0.3, 1); --ease-soft: cubic-bezier(0.22, 1, 0.36, 1); }
 .dark { color-scheme: dark; --bg: #08111F; --fg: #F8FAFC; --card: rgba(255,255,255,.08); --border: rgba(255,255,255,.12); }
 html { scroll-padding-top: 6rem; scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--fg); transition: background-color var(--motion-med) ease, color var(--motion-med) ease; }
+body { background: var(--bg); color: var(--fg); transition: background-color var(--motion-base) ease, color var(--motion-base) ease; }
 
 @layer components {
-  .glass { @apply border shadow-glow backdrop-blur-xl; background: var(--card); border-color: var(--border); transition: background-color var(--motion-med) ease, border-color var(--motion-med) ease, box-shadow var(--motion-med) ease, transform var(--motion-med) ease; }
+  .glass { @apply border shadow-glow backdrop-blur-xl; background: var(--card); border-color: var(--border); transition: background-color var(--motion-base) ease, border-color var(--motion-base) ease, box-shadow var(--motion-base) ease, transform var(--motion-base) ease; }
   .container-page { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
   .btn-primary { @apply relative inline-flex items-center justify-center overflow-hidden rounded-2xl bg-royal px-5 py-3 font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5 hover:bg-blue-700 active:scale-[.98] focus:outline-none focus:ring-2 focus:ring-cyan disabled:pointer-events-none disabled:opacity-60; }
   .btn-primary::after { content: ""; @apply pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 skew-x-12 bg-white/20 opacity-0 transition; }

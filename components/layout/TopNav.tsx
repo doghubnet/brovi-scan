@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Menu, ScanLine, X } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -15,6 +15,7 @@ export function TopNav() {
   const pathname = usePathname();
   const reduced = useReducedMotion();
   const lastScroll = useRef(0);
+  const { scrollY } = useScroll();
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const [scrolled, setScrolled] = useState(false);
@@ -26,21 +27,17 @@ export function TopNav() {
     supabase.auth.getUser().then(({ data }) => setStartHref(data.user ? "/dashboard" : "/login"));
   }, []);
 
-  useEffect(() => {
-    function onScroll() {
-      const current = window.scrollY;
-      setScrolled(current > 12);
-      if (current < 80) setVisible(true);
-      else setVisible(current < lastScroll.current);
-      lastScroll.current = current;
-    }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  useMotionValueEvent(scrollY, "change", (current) => {
+    const previous = lastScroll.current;
+    setScrolled(current > 12);
+    if (current < 80) setVisible(true);
+    else if (current > previous) setVisible(false);
+    else setVisible(true);
+    lastScroll.current = current;
+  });
 
   return (
-    <motion.header animate={{ y: visible || open ? 0 : -96 }} transition={{ duration: reduced ? 0 : 0.28, ease: "easeOut" }} className={`sticky top-0 z-30 border-b transition-colors duration-300 ${scrolled ? "border-slate-200/70 bg-soft/90 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-navy/90" : "border-transparent bg-soft/80 backdrop-blur dark:bg-navy/80"}`}>
+    <motion.header animate={{ y: visible || open ? 0 : -96 }} transition={{ duration: reduced ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }} className={`sticky top-0 z-30 border-b transition-colors duration-300 ${scrolled ? "border-slate-200/70 bg-soft/90 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-navy/90" : "border-transparent bg-soft/80 backdrop-blur dark:bg-navy/80"}`}>
       <div className="container-page flex min-h-20 items-center justify-between gap-4 py-3">
         <Link href="/" className="flex items-center gap-3 font-black tracking-tight">
           <span className="rounded-2xl bg-royal p-2 text-white"><ScanLine className="h-5 w-5" /></span>
