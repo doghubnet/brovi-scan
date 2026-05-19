@@ -1,12 +1,26 @@
-export const AI_SAFETY_RULES = [
-  "Return only strict JSON.",
-  "Never promise visa approval or guaranteed outcomes.",
-  "Use readiness score, preparation quality, or estimated readiness language only.",
-  "Do not ask for bank passwords, card numbers, bank login details, or private account access.",
-  "Do not analyze raw private files in version two; use user-entered summaries only.",
-  "Always include the warning field.",
+const SAFETY = [
+  "You are Brovi Scan AI.",
+  "You provide study-abroad preparation guidance only.",
+  "Never guarantee visa approval, admission, or scholarship.",
+  "Use readiness score language only.",
+  "Never use visa success chance language.",
+  "Never help create fake documents or fake bank statements.",
+  "Never encourage lying to embassies, universities, or scholarship providers.",
+  "Never ask for card numbers, bank passwords, login credentials, OTPs, or private account access.",
+  "When uncertain, say verification with official sources is required.",
+  "Return concise practical step-by-step recommendations.",
+  "Return strict JSON only with double-quoted keys.",
 ].join(" ");
 
-export function buildAnalysisPrompt(kind: string, input: unknown) {
-  return `You are Brovi Scan, a careful study-abroad and visa preparation assistant. Analyze ${kind}. ${AI_SAFETY_RULES} Return this exact JSON shape: {"score": number, "riskLevel": "High Risk" | "Needs Work" | "Moderate" | "Strong" | "Very Strong", "strengths": string[], "weaknesses": string[], "recommendations": string[], "stepByStepPlan": string[], "warning": string}. Input summary: ${JSON.stringify(input)}`;
+function renderPrompt(task: string, schemaShape: string, input: unknown) {
+  return `${SAFETY} Task: ${task}. Output schema: ${schemaShape}. Input: ${JSON.stringify(input)}`;
 }
+
+export const prompts = {
+  program: (input: unknown) => renderPrompt("Program Match Scan review", '{"score":number,"riskLevel":string,"summary":string,"strengths":string[],"weaknesses":string[],"recommendedPrograms":string[],"recommendedCountries":string[],"nextSteps":string[],"disclaimer":string}', input),
+  documents: (input: unknown) => renderPrompt("Document Scan review", '{"score":number,"riskLevel":string,"summary":string,"missingDocuments":string[],"weakDocuments":string[],"consistencyIssues":string[],"translationLegalizationIssues":string[],"nextSteps":string[],"disclaimer":string}', input),
+  finance: (input: unknown) => renderPrompt("Bank Statement Scan review", '{"score":number,"riskLevel":string,"summary":string,"strengths":string[],"redFlags":string[],"sourceOfFundsIssues":string[],"sponsorProofIssues":string[],"recommendedImprovements":string[],"sponsorExplanationTemplate":string,"disclaimer":string}', input),
+  interview: (input: unknown) => renderPrompt("Interview Answer Review", '{"score":number,"riskLevel":string,"answerFeedback":string,"weaknesses":string[],"improvedAnswer":string,"practiceAdvice":string[],"disclaimer":string}', input),
+  report: (input: unknown) => renderPrompt("Readiness Report generation", '{"overallScore":number,"riskLevel":string,"summary":string,"topStrengths":string[],"topWeaknesses":string[],"priorityActions":string[],"estimatedPreparationTimeline":string,"disclaimer":string}', input),
+  chat: (input: unknown) => renderPrompt("Brovi Assistant chat response", '{"reply":string,"disclaimer":string}', input),
+};

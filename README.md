@@ -68,3 +68,7 @@ Legacy phase files remain for migration reference only.
 ## Acceptance routes
 
 `/`, `/login`, `/dashboard`, `/program-match-scan`, `/document-scan`, `/bank-statement-scan`, `/interview-practice`, `/readiness-report`, `/applications`, `/document-vault`, `/tasks`, `/consultant-review`, `/admin`, `/privacy`, `/terms`.
+
+
+OpenAI/Vercel founder setup: set OPENAI_API_KEY and optional OPENAI_MODEL in Vercel environment variables, then redeploy.
+Required vars: OPENAI_API_KEY, OPENAI_MODEL, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, SUPABASE_SERVICE_ROLE_KEY, NEXT_PUBLIC_SITE_URL.

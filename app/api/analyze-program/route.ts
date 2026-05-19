@@ -1,2 +1,10 @@
-import { NextResponse } from "next/server"; import { analyzeWithGemini } from "@/lib/ai/gemini"; import { programFallback } from "@/lib/scoring";
-export async function POST(req:Request){ const input=await req.json(); return NextResponse.json(await analyzeWithGemini("program match readiness", input, programFallback)); }
+import { NextResponse } from "next/server";
+import { analyzeWithAI, canUseAI } from "@/lib/ai/provider";
+import { programFallback } from "@/lib/scoring";
+
+export async function POST(req: Request) {
+  const input = await req.json();
+  const result = await analyzeWithAI("program", input, programFallback);
+  if (!canUseAI()) return NextResponse.json({ ...result, warning: "AI review is temporarily unavailable. Basic scoring mode was used." });
+  return NextResponse.json(result);
+}

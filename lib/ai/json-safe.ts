@@ -1,18 +1,21 @@
-import type { AIReport } from "@/types";
+import type { ZodType } from "zod";
 
-export function parseAIReport(text: string, fallback: AIReport): AIReport {
+export function extractJsonObject(text: string) {
+  const cleaned = text.replace(/```json|```/gi, "").trim();
+  const start = cleaned.indexOf("{");
+  const end = cleaned.lastIndexOf("}");
+  if (start < 0 || end < 0 || end <= start) return null;
+  return cleaned.slice(start, end + 1);
+}
+
+export function safeParseJsonSchema<T>(text: string, schema: ZodType<T>) {
+  const source = extractJsonObject(text);
+  if (!source) return null;
   try {
-    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim()) as Partial<AIReport>;
-    return {
-      score: Number(parsed.score ?? fallback.score),
-      riskLevel: parsed.riskLevel ?? fallback.riskLevel,
-      strengths: Array.isArray(parsed.strengths) ? parsed.strengths : fallback.strengths,
-      weaknesses: Array.isArray(parsed.weaknesses) ? parsed.weaknesses : fallback.weaknesses,
-      recommendations: Array.isArray(parsed.recommendations) ? parsed.recommendations : fallback.recommendations,
-      stepByStepPlan: Array.isArray(parsed.stepByStepPlan) ? parsed.stepByStepPlan : fallback.stepByStepPlan,
-      warning: parsed.warning || "Brovi Scan provides preparation guidance only. The readiness score is not a visa guarantee.",
-    };
+    const parsed = JSON.parse(source) as unknown;
+    const validated = schema.safeParse(parsed);
+    return validated.success ? validated.data : null;
   } catch {
-    return fallback;
+    return null;
   }
 }
