@@ -10,7 +10,7 @@ export function AuthCard() {
   const [tab, setTab] = useState<"signIn" | "create">("signIn");
   return (
     <Reveal className="card w-full max-w-md p-6 sm:p-8">
-      <div className="mx-auto mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-royal text-white shadow-lg shadow-blue-500/20"><ShieldCheck className="h-6 w-6" /></div>
+      <div className="mx-auto mb-5 flex h-14 w-32 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-sm dark:bg-white/10"><img src="https://i.imgur.com/uxlbTeM.png" alt="Brovi logo" className="h-full w-full object-contain" onError={(e)=>{(e.currentTarget.style.display="none"); const n=e.currentTarget.nextElementSibling as HTMLElement | null; if(n) n.style.display="block";}}/><span style={{display:"none"}} className="text-sm font-black text-royal">BROVI</span></div>
       <div className="text-center">
         <h1 className="text-3xl font-black tracking-tight">Log in to Brovi Scan</h1>
         <p className="mt-2 muted">Save scans, reports, applications, tasks, documents, and consultant review requests.</p>

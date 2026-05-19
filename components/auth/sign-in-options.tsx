@@ -24,7 +24,7 @@ export function SignInOptions() {
     const { error: oauthError } = await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/auth/callback` } });
     if (oauthError) {
       if (process.env.NODE_ENV !== "production") console.error(oauthError);
-      setError(friendlyAuthMessage(oauthError));
+      setError("Google sign-in is temporarily unavailable. Please try email sign-in.");
       setGoogleLoading(false);
     }
   }
@@ -34,7 +34,7 @@ export function SignInOptions() {
   return (
     <div className="space-y-4">
       <button className="btn-secondary w-full justify-center" type="button" onClick={continueWithGoogle} disabled={googleLoading}>
-        {googleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <span className="mr-2 grid h-5 w-5 place-items-center rounded-full bg-white text-sm font-black text-royal shadow-sm">G</span>}
+        {googleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <span className="mr-2 grid h-5 w-5 place-items-center overflow-hidden rounded-full bg-white text-sm font-black text-royal shadow-sm"><img src="https://img.favpng.com/20/20/18/google-logo-google-logo-design-E6V0vj5m.jpg" alt="Google logo" className="h-full w-full object-cover" onError={(e)=>{(e.currentTarget.style.display="none"); const n=e.currentTarget.nextElementSibling as HTMLElement | null; if(n) n.style.display="block";}}/><span style={{display:"none"}}>G</span></span>}
         Continue with Google
       </button>
       <button className="btn-secondary w-full justify-center" type="button" onClick={() => setMode("phone")}>
