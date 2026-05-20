@@ -1,0 +1,4 @@
+"use client";
+import { DashboardShell } from "@/components/layout/DashboardShell";
+import { previewKeys } from "@/lib/preview/storage";
+export default function SettingsPage(){return <DashboardShell><h1 className="section-title">Settings</h1><div className="card space-y-3"><p className="muted">Preview settings only.</p><button className="btn-secondary" onClick={()=>alert("Language preference placeholder")}>Language preference</button><button className="btn-secondary" onClick={()=>alert("Email notification preference placeholder")}>Email notifications</button><button className="btn-secondary" onClick={()=>navigator.clipboard.writeText(JSON.stringify(localStorage)).then(()=>alert("Preview data copied"))}>Export preview data</button><button className="btn-secondary" onClick={()=>{Object.values(previewKeys).forEach(k=>localStorage.removeItem(k)); alert("Preview data cleared");}}>Clear preview data</button></div></DashboardShell>;}
