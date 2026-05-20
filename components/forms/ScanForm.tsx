@@ -10,6 +10,8 @@ import { RecommendationList } from "@/components/reports/RecommendationList";
 import { ScoreRing } from "@/components/scores/ScoreRing";
 
 type Field = {
+  title?: string;
+  ariaLabel?: string;
   name: string;
   label: string;
   type?: string;
@@ -40,7 +42,7 @@ export function ScanForm({
   const schema = useMemo(() => {
     const shape: z.ZodRawShape = {};
     fields.forEach((field) => {
-      shape[field.name] = field.numeric ? z.coerce.number().nonnegative(`${field.label} cannot be negative`) : z.string().min(1, `${field.label} is required`);
+      shape[field.name] = field.numeric ? z.coerce.number().nonnegative(`$<span title={field.title} aria-label={field.ariaLabel ?? field.label}>{field.label}</span> cannot be negative`) : z.string().min(1, `$<span title={field.title} aria-label={field.ariaLabel ?? field.label}>{field.label}</span> is required`);
     });
     return z.object(shape);
   }, [fields]);
@@ -73,9 +75,13 @@ export function ScanForm({
       return;
     }
     setLoading(true);
-    const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(parsed.data) });
-    const result = await res.json() as AIReport;
-    setReport(result);
+    try {
+      const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(parsed.data) });
+      const result = await res.json() as Partial<AIReport>;
+      setReport({ score: Number(result.score ?? 0), riskLevel: result.riskLevel ?? "High Risk", strengths: result.strengths ?? [], weaknesses: result.weaknesses ?? [], recommendations: result.recommendations ?? ["Review required documents and try again."], stepByStepPlan: result.stepByStepPlan ?? [], warning: result.warning ?? "Official verification is still required before submission.", confidence: result.confidence });
+    } catch {
+      setReport({ score: 0, riskLevel: "High Risk", strengths: [], weaknesses: ["Document scan could not be completed."], recommendations: ["Refresh and submit again."], stepByStepPlan: [], warning: "Official verification is still required before submission." });
+    }
     await saveToSupabase(parsed.data, result);
     setLoading(false);
   }
@@ -85,7 +91,7 @@ export function ScanForm({
       <form onSubmit={handleSubmit(onSubmit)} className="card grid gap-4 md:grid-cols-2">
         {fields.map((field) => (
           <label key={field.name} className={`label ${field.textarea ? "md:col-span-2" : ""}`}>
-            {field.label}
+            <span title={field.title} aria-label={field.ariaLabel ?? field.label}>{field.label}</span>
             {field.options ? (
               <select className="input mt-2" {...register(field.name, { required: true })} defaultValue="">
                 <option value="" disabled>Select {field.label.toLowerCase()}</option>
@@ -97,7 +103,7 @@ export function ScanForm({
               <input className="input mt-2" type={field.numeric ? "number" : field.type || "text"} min={field.numeric ? 0 : undefined} step={field.numeric ? "0.01" : undefined} placeholder={field.placeholder} {...register(field.name, { required: true })} />
             )}
             {field.helper ? <span className="helper">{field.helper}</span> : null}
-            {errors[field.name] ? <span className="mt-1 block text-xs text-risk">{field.label} is required.</span> : null}
+            {errors[field.name] ? <span className="mt-1 block text-xs text-risk"><span title={field.title} aria-label={field.ariaLabel ?? field.label}>{field.label}</span> is required.</span> : null}
           </label>
         ))}
         <button className="btn-primary md:col-span-2" type="submit" disabled={loading}>{loading ? "Scanning..." : submitLabel}</button>

@@ -111,3 +111,13 @@ DEBUG_AI_LOGGING
 
 ## Local deterministic analysis
 Brovi Scan core scans use local deterministic analysis. External free-tier AI is optional and restricted to general chatbot guidance.
+
+
+## Supabase Auth URL configuration
+
+In Supabase Auth settings, add:
+- Site URL: `https://brovi-scan.vercel.app`
+- Redirect URL: `https://brovi-scan.vercel.app/auth/callback`
+- Local Redirect URL: `http://localhost:3000/auth/callback`
+
+For email links, use `{{ .ConfirmationURL }}` in the template. For 6-digit email OTP mode, use `{{ .Token }}`.

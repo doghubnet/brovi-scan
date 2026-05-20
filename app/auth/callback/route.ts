@@ -1,15 +1,22 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { siteUrl } from "@/lib/env";
+
+function safeNextPath(value: string | null) {
+  if (!value) return "/dashboard";
+  return value.startsWith("/") && !value.startsWith("//") ? value : "/dashboard";
+}
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const redirectBase = requestUrl.origin || siteUrl;
-  if (!code) return NextResponse.redirect(`${redirectBase}/login?error=auth-callback`);
+  const nextPath = safeNextPath(requestUrl.searchParams.get("next"));
+  const base = requestUrl.origin;
+  if (!code) return NextResponse.redirect(`${base}/login?error=auth_callback_failed`);
+
   const supabase = await createServerSupabaseClient();
-  if (!supabase) return NextResponse.redirect(`${redirectBase}/login?error=auth-callback`);
+  if (!supabase) return NextResponse.redirect(`${base}/login?error=auth_callback_failed`);
+
   const { error } = await supabase.auth.exchangeCodeForSession(code);
-  if (error) return NextResponse.redirect(`${redirectBase}/login?error=auth-callback`);
-  return NextResponse.redirect(`${redirectBase}/dashboard`);
+  if (error) return NextResponse.redirect(`${base}/login?error=auth_callback_failed`);
+  return NextResponse.redirect(`${base}${nextPath}`);
 }
