@@ -21,7 +21,7 @@ export function TopNav() {
   const [scrolled, setScrolled] = useState(false);
   const { user, loading } = useAuthSession();
   const appRoute = pathname?.startsWith("/dashboard") || pathname?.startsWith("/document") || pathname?.startsWith("/program") || pathname?.startsWith("/bank") || pathname?.startsWith("/interview") || pathname?.startsWith("/readiness") || pathname?.startsWith("/applications") || pathname?.startsWith("/tasks") || pathname?.startsWith("/consultant");
-  const startHref = user ? "/dashboard" : "/login";
+  const startHref = "/program-match-scan";
 
   useMotionValueEvent(scrollY, "change", (current) => {
     const previous = lastScroll.current;
@@ -45,13 +45,13 @@ export function TopNav() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <UserMenu />
-          <div className="hidden gap-2 sm:flex">{loading ? <div className="h-10 w-32 animate-pulse rounded-2xl bg-slate-200/70 dark:bg-white/10" /> : <ButtonLink href={startHref}>{user && appRoute ? "Dashboard" : "Start Free Scan"}</ButtonLink>}</div>
+          <div className="hidden gap-2 sm:flex">{loading ? <div className="h-10 w-32 animate-pulse rounded-2xl bg-slate-200/70 dark:bg-white/10" /> : <ButtonLink href={startHref}>Start Free Scan</ButtonLink>}</div>
           <button className="rounded-2xl border border-slate-200 p-2 dark:border-white/10 lg:hidden" type="button" onClick={() => setOpen((value) => !value)} aria-label="Toggle menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
-      {open ? <nav className="container-page grid gap-2 pb-4 lg:hidden">{navItems.map((item) => <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className={`rounded-2xl px-4 py-3 text-sm font-semibold ${pathname === item.href ? "bg-blue-50 text-royal dark:bg-white/10" : "text-slate-700 dark:text-slate-200"}`}>{item.label}</Link>)}<div className="grid gap-2 border-t border-slate-200 pt-3 dark:border-white/10"><UserMenu mobile />{!loading ? <ButtonLink href={startHref}>{user && appRoute ? "Dashboard" : "Start Free Scan"}</ButtonLink> : null}</div></nav> : null}
+      {open ? <nav className="container-page grid gap-2 pb-4 lg:hidden">{navItems.map((item) => <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className={`rounded-2xl px-4 py-3 text-sm font-semibold ${pathname === item.href ? "bg-blue-50 text-royal dark:bg-white/10" : "text-slate-700 dark:text-slate-200"}`}>{item.label}</Link>)}<div className="grid gap-2 border-t border-slate-200 pt-3 dark:border-white/10"><UserMenu mobile />{!loading ? <ButtonLink href={startHref}>Start Free Scan</ButtonLink> : null}</div></nav> : null}
     </motion.header>
   );
 }
