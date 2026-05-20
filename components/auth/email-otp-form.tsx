@@ -21,7 +21,7 @@ export function EmailOtpForm({
     event.preventDefault();
     setError("");
     const supabase = createClient();
-    if (!supabase) return setError("Sign in is temporarily unavailable. Please try again later.");
+    if (!supabase) return setError("Supabase authentication is not configured for this deployment.");
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {

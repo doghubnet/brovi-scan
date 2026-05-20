@@ -1,7 +1,13 @@
 import { createBrowserClient } from "@supabase/ssr";
-import { isSupabaseConfigured, supabasePublishableKey, supabaseUrl } from "@/lib/env";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+
+if (process.env.NODE_ENV !== "production" && (!supabaseUrl || !supabaseAnonKey)) {
+  console.warn("Supabase browser env is missing. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.");
+}
 
 export function createClient() {
-  if (!isSupabaseConfigured) return null;
-  return createBrowserClient(supabaseUrl, supabasePublishableKey);
+  if (!supabaseUrl || !supabaseAnonKey) return null;
+  return createBrowserClient(supabaseUrl, supabaseAnonKey);
 }

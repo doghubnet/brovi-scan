@@ -34,7 +34,7 @@ export function TopNav() {
     <motion.header animate={{ y: visible || open ? 0 : -96 }} transition={{ duration: reduced ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }} className={`sticky top-0 z-30 border-b transition-colors duration-300 ${scrolled ? "border-slate-200/70 bg-soft/90 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-navy/90" : "border-transparent bg-soft/80 backdrop-blur dark:bg-navy/80"}`}>
       <div className="container-page flex min-h-[76px] items-center justify-between gap-4 py-3">
         <Link href="/" className="flex items-center gap-3 font-black tracking-tight">
-          <img src="https://i.imgur.com/vwUJlqR.jpeg" alt="BROVI Scan" className="h-9 w-9 rounded-lg object-cover" />
+          <img src="https://i.imgur.com/Gbomc48.jpeg" alt="BROVI Scan" className="h-9 w-9 rounded-lg object-contain bg-white" />
           <span>BROVI <span className="text-royal">Scan</span></span>
         </Link>
         <nav className="hidden items-center gap-5 text-sm font-medium text-slate-600 dark:text-slate-300 lg:flex">
